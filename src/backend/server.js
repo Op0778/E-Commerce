@@ -8,9 +8,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// MongoDB conn
+// MongoDB conn  mongodb://127.0.0.1:27017/e-commerce
 mongoose
-  .connect("mongodb://127.0.0.1:27017/e-commerce", {
+  .connect("mongodb+srv://omprakash:opMdu020@cluster0-shard-00-02.txpzw.mongodb.net:27017/e-commerce?retryWrites=true&w=majority", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
