@@ -10,7 +10,7 @@ app.use(express.json());
 
 // MongoDB conn  mongodb://127.0.0.1:27017/e-commerce
 mongoose
-  .connect("mongodb+srv://omprakash:opMdu020@cluster0-shard-00-02.txpzw.mongodb.net/e-commerce?retryWrites=true&w=majority", {
+  .connect("mongodb+srv://omprakash:opMdu020@cluster0.txpzw.mongodb.net/e-commerce?retryWrites=true&w=majority", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
