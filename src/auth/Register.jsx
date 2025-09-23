@@ -12,7 +12,7 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/api/register", form);
+      await axios.post("https://ecommerce-backend-b23p.onrender.com/api/register", form);
       alert("Registered successfully!");
       navigate("/login");
     } catch (err) {
