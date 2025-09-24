@@ -13,7 +13,9 @@ const Shop = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/products");
+        const res = await axios.get(
+          "https://ecommerce-backend-b23p.onrender.com/api/products"
+        );
         setProducts(Array.isArray(res.data) ? res.data : []);
       } catch (err) {
         console.error("Error fetching products:", err);
@@ -31,7 +33,7 @@ const Shop = () => {
         if (!userId) return;
 
         const res = await axios.get(
-          `http://localhost:5000/api/saved/${userId}`
+          `https://ecommerce-backend-b23p.onrender.com/api/saved/${userId}`
         );
         // store only IDs to use with includes
         setFavorites(res.data.map((prod) => prod._id));
@@ -49,7 +51,7 @@ const Shop = () => {
       if (!userId) return;
 
       const res = await axios.post(
-        `http://localhost:5000/api/favorites/${productId}`,
+        `https://ecommerce-backend-b23p.onrender.com/api/favorites/${productId}`,
         { userId }
       );
       // Update local state with updated favorites from DB
@@ -69,11 +71,10 @@ const Shop = () => {
           className="product-card"
           onClick={() => navigate(`/product/${item._id}`)}
         >
-          {/* Favorite icon */}
           <div
             className="favorite-icon"
             onClick={(e) => {
-              e.stopPropagation(); // prevent navigation
+              e.stopPropagation();
               toggleFavorite(item._id);
             }}
           >

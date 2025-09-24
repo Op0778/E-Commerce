@@ -7,19 +7,21 @@ const UpdateProfile = () => {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(true);
 
-  // ✅ Get userId and token from localStorage
   const userId = localStorage.getItem("userId");
   const token = localStorage.getItem("token");
 
-  // ✅ Fetch existing profile data
+  //  Fetch existing profile data
   useEffect(() => {
     const fetchProfile = async () => {
       if (!userId || !token) return;
 
       try {
-        const res = await axios.put(`http://localhost:5000/api/profile`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await axios.put(
+          `https://ecommerce-backend-b23p.onrender.com/api/profile`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
 
         // populate form with existing data
         setForm({
@@ -39,9 +41,6 @@ const UpdateProfile = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  //   const userId = localStorage.getItem("userId"); // must exist
-  //   const token = localStorage.getItem("token");
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -49,7 +48,7 @@ const UpdateProfile = () => {
 
     try {
       const res = await axios.patch(
-        `http://localhost:5000/api/users/update/${userId}`,
+        `https://ecommerce-backend-b23p.onrender.com/api/users/update/${userId}`,
         form,
         { headers: { Authorization: `Bearer ${token}` } }
       );

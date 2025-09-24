@@ -11,9 +11,12 @@ function Profile({ token }) {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/profile", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await axios.get(
+          "https://ecommerce-backend-b23p.onrender.com/api/profile",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         setUser(res.data);
       } catch (err) {
         console.error(err);
@@ -57,20 +60,6 @@ function Profile({ token }) {
       )}
 
       <button onClick={() => navigate("/update")}>Update</button>
-      {/* <div>
-        <strong>Favorites:</strong>
-        {user.favorites && user.favorites.length > 0 ? (
-          <ul>
-            {user.favorites.map((fav) => (
-              <li key={fav._id}>
-                {fav.name} – ₹{fav.price}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>No favorites yet</p>
-        )}
-      </div> */}
     </div>
   );
 }

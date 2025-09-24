@@ -9,14 +9,14 @@ function SavedProduct() {
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
-  // ✅ Fetch saved products
+  //  Fetch saved products
   useEffect(() => {
     if (!userId || !token) return;
 
     const fetchSaved = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/saved/${userId}`,
+          `https://ecommerce-backend-b23p.onrender.com/api/saved/${userId}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setSaved(res.data);
@@ -28,26 +28,26 @@ function SavedProduct() {
     fetchSaved();
   }, [userId, token]);
 
-  // ✅ Toggle save/remove product
+  //  Toggle save/remove product
   const toggleSave = async (productId, isSaved) => {
     try {
       if (isSaved) {
         // Remove product
         await axios.delete(
-          `http://localhost:5000/api/remove/${userId}/${productId}`,
+          `https://ecommerce-backend-b23p.onrender.com/api/remove/${userId}/${productId}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setSaved((prev) => prev.filter((p) => p._id !== productId));
       } else {
         // Save product
         await axios.post(
-          `http://localhost:5000/api/users/${userId}/save`,
+          `https://ecommerce-backend-b23p.onrender.com/api/users/${userId}/save`,
           { productId },
           { headers: { Authorization: `Bearer ${token}` } }
         );
         // re-fetch after saving
         const res = await axios.get(
-          `http://localhost:5000/api/saved/${userId}`,
+          `https://ecommerce-backend-b23p.onrender.com/api/saved/${userId}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setSaved(res.data);
@@ -74,7 +74,7 @@ function SavedProduct() {
             gap: "10px",
             cursor: "pointer",
           }}
-          onClick={() => navigate(`/product/${p._id}`)} // ✅ Correct navigation
+          onClick={() => navigate(`/product/${p._id}`)}
         >
           <img src={p.image} alt={p.name} width="100" />
           <div style={{ flex: 1 }}>
@@ -86,7 +86,7 @@ function SavedProduct() {
           <button
             onClick={(e) => {
               e.stopPropagation();
-              toggleSave(p._id, true); // remove via heart
+              toggleSave(p._id, true);
             }}
             style={{ background: "none", border: "none", cursor: "pointer" }}
           >

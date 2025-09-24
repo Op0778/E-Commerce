@@ -14,9 +14,12 @@ const Orders = () => {
           return;
         }
 
-        const res = await axios.get("http://localhost:5000/api/orders", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await axios.get(
+          "https://ecommerce-backend-b23p.onrender.com/api/orders",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
 
         setOrders(res.data);
       } catch (err) {

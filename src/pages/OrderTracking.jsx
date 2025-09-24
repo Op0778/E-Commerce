@@ -18,7 +18,7 @@ function OrderTracking({ order }) {
     const fetchStatus = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/orders/${order._id}`,
+          `https://ecommerce-backend-b23p.onrender.com/api/orders/${order._id}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setStatus(res.data.status);

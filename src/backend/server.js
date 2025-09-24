@@ -9,11 +9,12 @@ app.use(cors());
 app.use(express.json());
 
 // MongoDB conn  mongodb://127.0.0.1:27017/e-commerce
-mongoose.connect(
-  "mongodb+srv://omprakash:opMdu020@cluster0.txpzw.mongodb.net/e-commerce?retryWrites=true&w=majority"
-)
-  .then(() => console.log("✅ MongoDB connected"))
-  .catch((err) => console.error("❌ MongoDB error:", err));
+mongoose
+  .connect(
+    "mongodb+srv://omprakash:opMdu020@cluster0.txpzw.mongodb.net/e-commerce?retryWrites=true&w=majority"
+  )
+  .then(() => console.log(" MongoDB connected"))
+  .catch((err) => console.error(" MongoDB error:", err));
 
 // User Schema
 const userSchema = new mongoose.Schema({

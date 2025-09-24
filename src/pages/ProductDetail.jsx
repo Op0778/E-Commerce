@@ -15,7 +15,9 @@ const ProductDetail = ({ token }) => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/products/${id}`);
+        const res = await axios.get(
+          `https://ecommerce-backend-b23p.onrender.com/api/products/${id}`
+        );
         setProduct(res.data);
       } catch (e) {
         console.error("Error fetching product:", e);
@@ -30,9 +32,12 @@ const ProductDetail = ({ token }) => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/profile", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await axios.get(
+          "https://ecommerce-backend-b23p.onrender.com/api/profile",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         setUser(res.data);
       } catch (err) {
         console.error("Profile fetch error:", err);
@@ -50,7 +55,7 @@ const ProductDetail = ({ token }) => {
       }
 
       const res = await axios.post(
-        "http://localhost:5000/api/orders",
+        "https://ecommerce-backend-b23p.onrender.com/api/orders",
         { productId: product._id, quantity: 1 },
         { headers: { Authorization: `Bearer ${token}` } }
       );
