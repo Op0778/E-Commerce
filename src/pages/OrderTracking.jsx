@@ -14,7 +14,8 @@ function OrderTracking({ order }) {
   useEffect(() => {
     if (!order?._id) return;
 
-    const token = localStorage.getItem("token"); // or accept token as prop
+    const token = localStorage.getItem("token");
+
     const fetchStatus = async () => {
       try {
         const res = await axios.get(
@@ -26,8 +27,8 @@ function OrderTracking({ order }) {
         console.error("Error fetching order status:", err);
       }
     };
-    fetchStatus();
 
+    fetchStatus();
     let interval = null;
     if (status !== "Delivered") {
       interval = setInterval(fetchStatus, 5000);

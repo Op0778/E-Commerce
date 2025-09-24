@@ -227,14 +227,21 @@ app.post("/api/orders", authMiddleware, async (req, res) => {
   }
 });
 
-// get all orders for logged-in user
-app.get("/api/orders", authMiddleware, async (req, res) => {
+// ✅ Get single order by ID (still works if you want it)
+app.get("/api/orders/:id", authMiddleware, async (req, res) => {
   try {
-    const orders = await Order.find({ userId: req.user.id })
-      .populate("productId", "name price") // show product details
-      .populate("userId", "username email"); // optional: show user info
+    const order = await Order.findById(req.params.id).populate(
+      "productId",
+      "name price image"
+    );
 
-    res.json(orders);
+    if (!order) return res.status(404).json({ error: "Order not found" });
+
+    if (order.userId.toString() !== req.user.id) {
+      return res.status(403).json({ error: "Forbidden" });
+    }
+
+    res.json(order);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

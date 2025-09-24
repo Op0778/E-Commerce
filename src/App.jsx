@@ -16,54 +16,43 @@ function App() {
   const handleLogin = (t, id) => {
     setToken(t);
     localStorage.setItem("token", t);
-    localStorage.setItem("userId", id); // ✅ store userId
+    localStorage.setItem("userId", id);
   };
 
   const handleLogout = () => {
     setToken(null);
-    //setUserId(null);
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
   };
 
   return (
-    <Routes>
-      <Route path="/" element={<Login onLogin={handleLogin} />} />
-      <Route path="/register" element={<Register />} />
-      <Route
-        path="/home"
-        element={
-          token ? <Home onLogout={handleLogout} /> : <Navigate to="/login" />
-        }
-      />
-      <Route
-        path="/profile"
-        element={token ? <Profile token={token} /> : <Navigate to="/login" />}
-      />
-      <Route
-        path="/update"
-        element={
-          localStorage.getItem("token") ? (
-            <UpdateProfile /> // component will internally read userId from localStorage
-          ) : (
-            <Navigate to="/login" />
-          )
-        }
-      />
-      <Route path="/product" element={<Shop />} />
-      <Route path="/product/:id" element={<ProductDetail token={token} />} />
-      <Route
-        path="/saved"
-        element={
-          token ? (
-            <SavedProduct /> // ✅ pass userId
-          ) : (
-            <Navigate to="/login" />
-          )
-        }
-      />
-      <Route path="/order" element={<Orders />} />
-    </Routes>
+    <>
+      <Routes>
+        <Route path="/" element={<Login onLogin={handleLogin} />} />
+        <Route path="/register" element={<Register />} />
+        <Route
+          path="/home"
+          element={
+            token ? <Home onLogout={handleLogout} /> : <Navigate to="/" />
+          }
+        />
+        <Route
+          path="/profile"
+          element={token ? <Profile token={token} /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/update"
+          element={token ? <UpdateProfile /> : <Navigate to="/" />}
+        />
+        <Route path="/product" element={<Shop />} />
+        <Route path="/product/:id" element={<ProductDetail token={token} />} />
+        <Route
+          path="/saved"
+          element={token ? <SavedProduct /> : <Navigate to="/" />}
+        />
+        <Route path="/order" element={<Orders />} />
+      </Routes>
+    </>
   );
 }
 

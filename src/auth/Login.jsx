@@ -13,7 +13,10 @@ export default function Login({ onLogin }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("https://ecommerce-backend-b23p.onrender.com/api/login", form);
+      const res = await axios.post(
+        "https://ecommerce-backend-b23p.onrender.com/api/login",
+        form
+      );
 
       const token = res.data.token;
       const userId = res.data.user._id; // ✅ get user ID from response
