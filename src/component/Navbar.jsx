@@ -27,7 +27,7 @@ const Navbar = () => {
         return;
       }
       const res = await axios.get(
-        `http://localhost:5000/api/products/search?q=${searchTerm}`
+        `https://ecommerce-backend-b23p.onrender.com/api/products/search?q=${searchTerm}`
       );
       setProducts(res.data);
       setSearched(true);

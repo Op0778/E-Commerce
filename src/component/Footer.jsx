@@ -1,12 +1,18 @@
 import React from "react";
 import "../style/footerStyle.css";
 
-const Footer = () => {
+export default function Footer() {
   return (
-    <>
-      <div className="foot">This Developed By Omprakash @ 2025</div>
-    </>
+    <footer className="site-footer">
+      <div className="footer-inner">
+        <p className="disclaimer">
+          This project is for demonstration purposes only and is not a real
+          e-commerce website.
+        </p>
+        <small className="copyright">
+          &copy; {new Date().getFullYear()} E-Commerce. All rights reserved.
+        </small>
+      </div>
+    </footer>
   );
-};
-
-export default Footer;
+}
