@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import Register from "./auth/Register";
 import Login from "./auth/Login";
 import Home from "./pages/Home";
@@ -27,6 +27,7 @@ function App() {
   };
 
   return (
+    <HashRouter>
     <Routes>
       <Route path="/" element={<Login onLogin={handleLogin} />} />
       <Route path="/register" element={<Register />} />
@@ -64,6 +65,7 @@ function App() {
       />
       <Route path="/order" element={<Orders />} />
     </Routes>
+      <HashRouter/>
   );
 }
 
