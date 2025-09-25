@@ -3,15 +3,19 @@ import mongoose from "mongoose";
 import cors from "cors";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 // MongoDB conn  mongodb://127.0.0.1:27017/e-commerce
+// "mongodb+srv://omprakash:opMdu020@cluster0.txpzw.mongodb.net/e-commerce?retryWrites=true&w=majority"
 mongoose
   .connect(
-    "mongodb+srv://omprakash:opMdu020@cluster0.txpzw.mongodb.net/e-commerce?retryWrites=true&w=majority"
+    process.env.MONGO_URI
   )
   .then(() => console.log(" MongoDB connected"))
   .catch((err) => console.error(" MongoDB error:", err));
@@ -315,7 +319,7 @@ app.delete("/api/remove/:userId/:productId", async (req, res) => {
   }
 });
 
-const PORT = 5000;
-app.listen(5000, () =>
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () =>
   console.log(`Server running on http://localhost:${PORT}`)
 );
