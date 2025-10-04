@@ -52,7 +52,7 @@
   .navbar-down {
     background-color: aquamarine;
     height: 50px;
-    width: 100%;
+    width: 96vw;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -60,7 +60,7 @@
     border-radius: 5px;
     position: fixed;
     bottom: 0px;
-    z-index:1;
+    z-index: 1;
   }
   .navbar .navbar-right {
     display: none;
