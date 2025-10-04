@@ -40,7 +40,7 @@ const Navbar = () => {
     <div className="">
       <div className="navbar">
         <div className="navbar-right">
-          <div onClick={() => navigate("/profile")}>
+          <div className="userLogo" onClick={() => navigate("/profile")}>
             <FaUser />
           </div>
           <div className="navbar-logo">
@@ -61,6 +61,26 @@ const Navbar = () => {
         </div>
 
         <div className="navbar-right">
+          <div onClick={() => navigate("/saved")}>
+            <FaRegHeart />
+          </div>
+          <div onClick={() => navigate("/order")}>
+            <FaBoxOpen />
+          </div>
+
+          <div onClick={() => navigate("/")}>
+            <MdLogout />
+          </div>
+        </div>
+      </div>
+      <div className="navbar-down">
+        <div className="navbar-bottom ">
+          <div onClick={() => navigate("/profile")}>
+            <FaUser />
+          </div>
+          <div className="navbar-logo">
+            <BsCart />
+          </div>
           <div onClick={() => navigate("/saved")}>
             <FaRegHeart />
           </div>

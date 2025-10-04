@@ -19,12 +19,12 @@ export default function Login({ onLogin }) {
       );
 
       const token = res.data.token;
-      const userId = res.data.user._id; // ✅ get user ID from response
+      const userId = res.data.user._id;
 
       localStorage.setItem("token", token);
-      localStorage.setItem("userId", userId); // ✅ save userId
+      localStorage.setItem("userId", userId);
 
-      onLogin(token, userId); // pass both to App
+      onLogin(token, userId);
       navigate("/home");
     } catch (err) {
       alert(err.response?.data?.error || "Error");

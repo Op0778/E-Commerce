@@ -64,3 +64,14 @@ label {
 .relink {
   color: yellow;
 }
+
+@media (min-width: 300px) and (max-width: 480px) {
+  .log-reg-form {
+    height: 50vh;
+    width: 90vw;
+    margin: 5vw;
+  }
+  .log-reg-form input {
+    width: 60vw;
+  }
+}
