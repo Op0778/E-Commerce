@@ -4,46 +4,64 @@ import "../style/formStyle.css";
 
 const UpdateProfile = () => {
   const [form, setForm] = useState({ mobile: "", address: "" });
+  const [profilePic, setProfilePic] = useState(null);
+  const [preview, setPreview] = useState(null);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(true);
 
   const userId = localStorage.getItem("userId");
   const token = localStorage.getItem("token");
 
-  //  Fetch existing profile data
+  // ✅ Fetch user profile details
   useEffect(() => {
     const fetchProfile = async () => {
       if (!userId || !token) return;
 
       try {
-        const res = await axios.put(
-          `https://ecommerce-backend-b23p.onrender.com/api/profile`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
+        const res = await axios.get(
+          `https://ecommerce-backend-b23p.onrender.com/api/users/${userId}`,
+          { headers: { Authorization: `Bearer ${token}` } }
         );
 
-        // populate form with existing data
         setForm({
           mobile: res.data.mobile || "",
           address: res.data.address || "",
         });
+
+        // ✅ Show saved profile pic (if any)
+        if (res.data.profilePic) {
+          setPreview(`data:image/jpeg;base64,${res.data.profilePic}`);
+        }
       } catch (err) {
         console.error("Fetch Profile Error:", err);
       } finally {
         setLoading(false);
       }
     };
+
     fetchProfile();
   }, [userId, token]);
 
+  // ✅ Handle input text changes
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  // ✅ Handle file select for profile pic
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setProfilePic(file);
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => setPreview(reader.result);
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // ✅ Update profile text details
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!userId) return alert("User not logged in");
 
     try {
@@ -52,10 +70,32 @@ const UpdateProfile = () => {
         form,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      setMessage(res.data.message);
+      setMessage(res.data.message || "Profile updated successfully");
     } catch (err) {
       console.error("Update Error:", err);
       setMessage("Failed to update profile");
+    }
+  };
+
+  // ✅ Upload profile picture
+  const handleUploadPic = async (e) => {
+    e.preventDefault();
+    if (!profilePic) return alert("Please select a profile picture first");
+
+    const formData = new FormData();
+    formData.append("image", profilePic);
+
+    try {
+      const res = await axios.post(
+        `https://ecommerce-backend-b23p.onrender.com/api/upload-profile-pic`,
+        formData,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setMessage("Profile picture updated successfully");
+      setPreview(`data:image/jpeg;base64,${res.data.profilePic}`);
+    } catch (err) {
+      console.error("Upload Error:", err);
+      setMessage("Failed to upload profile picture");
     }
   };
 
@@ -65,6 +105,34 @@ const UpdateProfile = () => {
     <div className="bg">
       <form onSubmit={handleSubmit} className="log-reg-form">
         <h2>Update Profile</h2>
+
+        {/* ✅ Profile Picture Section */}
+        <div className="profile-pic-section">
+          {preview ? (
+            <img
+              src={preview}
+              alt="Profile Preview"
+              className="profile-pic-preview"
+            />
+          ) : (
+            <div className="placeholder-pic">No Profile Picture</div>
+          )}
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            style={{ marginTop: "10px" }}
+          />
+          <button
+            onClick={handleUploadPic}
+            type="button"
+            style={{ marginTop: "10px" }}
+          >
+            Upload Picture
+          </button>
+        </div>
+
+        {/* ✅ Text fields */}
         <div>
           <label>Mobile: </label>
           <input
@@ -72,8 +140,10 @@ const UpdateProfile = () => {
             name="mobile"
             value={form.mobile}
             onChange={handleChange}
+            placeholder="Enter new mobile number"
           />
         </div>
+
         <div>
           <label>Address: </label>
           <input
@@ -81,10 +151,13 @@ const UpdateProfile = () => {
             name="address"
             value={form.address}
             onChange={handleChange}
+            placeholder="Enter new address"
           />
         </div>
+
         <button type="submit">Update</button>
       </form>
+
       {message && <p>{message}</p>}
     </div>
   );
