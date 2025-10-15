@@ -28,7 +28,7 @@ const UpdateProfile = () => {
           address: res.data.address || "",
         });
 
-        // ✅ Show saved profile pic (if any)
+        // ✅ Load saved profile pic if any
         if (res.data.profilePic) {
           setPreview(`data:image/jpeg;base64,${res.data.profilePic}`);
         }
@@ -42,12 +42,12 @@ const UpdateProfile = () => {
     fetchProfile();
   }, [userId, token]);
 
-  // ✅ Handle input text changes
+  // ✅ Handle input changes
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // ✅ Handle file select for profile pic
+  // ✅ Handle file selection
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setProfilePic(file);
@@ -59,43 +59,36 @@ const UpdateProfile = () => {
     }
   };
 
-  // ✅ Update profile text details
+  // ✅ Update all fields + profile pic together
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!userId) return alert("User not logged in");
 
+    const formData = new FormData();
+    formData.append("mobile", form.mobile);
+    formData.append("address", form.address);
+    if (profilePic) formData.append("profilePic", profilePic); // ✅ must match backend key
+
     try {
       const res = await axios.patch(
         `https://ecommerce-backend-b23p.onrender.com/api/users/update/${userId}`,
-        form,
-        { headers: { Authorization: `Bearer ${token}` } }
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
+
       setMessage(res.data.message || "Profile updated successfully");
+
+      if (res.data.user.profilePic) {
+        setPreview(`data:image/jpeg;base64,${res.data.user.profilePic}`);
+      }
     } catch (err) {
       console.error("Update Error:", err);
       setMessage("Failed to update profile");
-    }
-  };
-
-  // ✅ Upload profile picture
-  const handleUploadPic = async (e) => {
-    e.preventDefault();
-    if (!profilePic) return alert("Please select a profile picture first");
-
-    const formData = new FormData();
-    formData.append("image", profilePic);
-
-    try {
-      const res = await axios.post(
-        `https://ecommerce-backend-b23p.onrender.com/api/upload-profile-pic`,
-        formData,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setMessage("Profile picture updated successfully");
-      setPreview(`data:image/jpeg;base64,${res.data.profilePic}`);
-    } catch (err) {
-      console.error("Upload Error:", err);
-      setMessage("Failed to upload profile picture");
     }
   };
 
@@ -123,16 +116,9 @@ const UpdateProfile = () => {
             onChange={handleFileChange}
             style={{ marginTop: "10px" }}
           />
-          <button
-            onClick={handleUploadPic}
-            type="button"
-            style={{ marginTop: "10px" }}
-          >
-            Upload Picture
-          </button>
         </div>
 
-        {/* ✅ Text fields */}
+        {/* ✅ Text Fields */}
         <div>
           <label>Mobile: </label>
           <input
@@ -155,7 +141,7 @@ const UpdateProfile = () => {
           />
         </div>
 
-        <button type="submit">Update</button>
+        <button type="submit">Update Profile</button>
       </form>
 
       {message && <p>{message}</p>}
