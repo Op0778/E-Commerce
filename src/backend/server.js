@@ -11,7 +11,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log(" MongoDB connected"))
@@ -27,6 +26,7 @@ const userSchema = new mongoose.Schema({
   ],
   mobile: { type: String },
   address: { type: String },
+  profilePic: { type: String },
 });
 const User = mongoose.model("User", userSchema);
 
