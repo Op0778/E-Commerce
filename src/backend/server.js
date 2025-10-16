@@ -4,14 +4,11 @@ import cors from "cors";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import multer from "multer";
-//import fs from "fs";
-// import path from "path";
+//import multer from "multer";
+import fs from "fs";
+import upload from "./upload.js";
 
 dotenv.config();
-
-// Configure Multer for temporary file storage
-const upload = multer({ dest: "uploads/" });
 
 const app = express();
 app.use(cors());
@@ -120,15 +117,26 @@ app.get("/api/profile", async (req, res) => {
   }
 });
 
+// Upload API route
 app.post("/api/upload", upload.single("image"), async (req, res) => {
-  const imageUrl = `/uploads/${req.file.filename}`; // local or cloud url
-  const newUser = new User({
-    name: req.body.name,
-    email: req.body.email,
-    profilePicUrl: imageUrl,
-  });
-  await newUser.save();
-  res.json({ message: "Image URL saved", imageUrl });
+  try {
+    const newUser = new User({
+      name: req.body.name,
+      email: req.body.email,
+      profilePic: {
+        data: fs.readFileSync(req.file.path),
+        contentType: req.file.mimetype,
+      },
+    });
+
+    await newUser.save();
+    fs.unlinkSync(req.file.path); // delete local file after saving
+
+    res.status(200).send("Profile image uploaded successfully!");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error uploading image");
+  }
 });
 
 // profile update

@@ -9,6 +9,7 @@ import ProductDetail from "./pages/ProductDetail";
 import SavedProduct from "./pages/SavedProduct";
 import Orders from "./pages/Orders";
 import UpdateProfile from "./pages/UpdateProfile";
+import ProfilePicUpload from "./pages/ProfilePicUpload";
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem("token"));
@@ -40,6 +41,7 @@ function App() {
           path="/profile"
           element={token ? <Profile token={token} /> : <Navigate to="/" />}
         />
+        <Route path="/upload" element={<ProfilePicUpload />} />
         <Route
           path="/update"
           element={token ? <UpdateProfile /> : <Navigate to="/" />}
