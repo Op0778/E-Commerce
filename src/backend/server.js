@@ -4,14 +4,14 @@ import cors from "cors";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import multer from "multer";
-import fs from "fs";
+// import multer from "multer";
+// import fs from "fs";
 // import path from "path";
 
 dotenv.config();
 
 // Configure Multer for temporary file storage
-const upload = multer({ dest: "uploads/" });
+// const upload = multer({ dest: "uploads/" });
 
 const app = express();
 app.use(cors());
@@ -121,54 +121,26 @@ app.get("/api/profile", async (req, res) => {
 });
 
 // profile update
-app.patch(
-  "/api/users/update/:id",
-  upload.single("profilePic"),
-  async (req, res) => {
-    const { id } = req.params;
-    const { mobile, address } = req.body;
-
-    try {
-      // Prepare update object
-      const updateFields = {};
-
-      if (mobile) updateFields.mobile = mobile;
-      if (address) updateFields.address = address;
-
-      // ✅ If a profile picture is uploaded
-      if (req.file) {
-        const img = fs.readFileSync(req.file.path);
-        const encode_img = img.toString("base64");
-        updateFields.profilePic = encode_img;
-
-        // Delete temp file after conversion
-        fs.unlinkSync(req.file.path);
-      }
-
-      // 🔄 Update user in MongoDB
-      const updatedUser = await User.findByIdAndUpdate(
-        id,
-        { $set: updateFields },
-        { new: true }
-      );
-
-      // ⚠️ If user not found
-      if (!updatedUser) {
-        return res.status(404).json({ message: "User not found" });
-      }
-
-      // ✅ Success response
-      res.json({
-        message: "Profile updated successfully",
-        user: updatedUser,
-      });
-    } catch (err) {
-      console.error("Error updating profile:", err);
-      res.status(500).json({ error: err.message });
+app.patch("/api/users/update/:id", async (req, res) => {
+  const { id } = req.params;
+  const { mobile, address } = req.body;
+  try {
+    const updateFields = {};
+    if (mobile) updateFields.mobile = mobile;
+    if (address) updateFields.address = address;
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      { $set: updateFields },
+      { new: true }
+    );
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
     }
+    res.json({ message: "Profile updated successfully", user: updatedUser });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
-);
-
+});
 // get all products
 app.get("/api/products", async (req, res) => {
   const products = await Product.find();
