@@ -4,14 +4,14 @@ import cors from "cors";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-// import multer from "multer";
-// import fs from "fs";
+import multer from "multer";
+//import fs from "fs";
 // import path from "path";
 
 dotenv.config();
 
 // Configure Multer for temporary file storage
-// const upload = multer({ dest: "uploads/" });
+const upload = multer({ dest: "uploads/" });
 
 const app = express();
 app.use(cors());
@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema({
   ],
   mobile: { type: String },
   address: { type: String },
-  profilePic: { type: String },
+  profilePic: { Type: String },
 });
 const User = mongoose.model("User", userSchema);
 
@@ -118,6 +118,17 @@ app.get("/api/profile", async (req, res) => {
   } catch (err) {
     res.status(401).json(err, { error: "Invalid token" });
   }
+});
+
+app.post("/api/upload", upload.single("image"), async (req, res) => {
+  const imageUrl = `/uploads/${req.file.filename}`; // local or cloud url
+  const newUser = new User({
+    name: req.body.name,
+    email: req.body.email,
+    profilePicUrl: imageUrl,
+  });
+  await newUser.save();
+  res.json({ message: "Image URL saved", imageUrl });
 });
 
 // profile update
