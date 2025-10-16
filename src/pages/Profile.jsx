@@ -29,10 +29,16 @@ function Profile({ token }) {
 
   return (
     <div className="profile">
-      <h2>
-        <FaUserCircle size={"100px"} />
-      </h2>
-
+      {user.profilePic ? (
+        <img
+          src={`data:image/png;base64,${user.profilePic}`}
+          alt="Profile"
+          className="profile-pic"
+        />
+      ) : (
+        <FaUserCircle size={"100px"} color="#777" />
+      )}
+{console.log("profile pic is  ",user.profilePic)}
       <p>
         <strong>Username:</strong> {user.username}
       </p>
