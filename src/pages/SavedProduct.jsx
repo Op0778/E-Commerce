@@ -98,4 +98,4 @@ function SavedProduct() {
   );
 }
 
-export default SavedProduct;
+export default React.memo(SavedProduct);

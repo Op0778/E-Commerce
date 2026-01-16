@@ -96,4 +96,4 @@ const UpdateProfile = () => {
   );
 };
 
-export default UpdateProfile;
+export default React.memo(UpdateProfile);

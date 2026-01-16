@@ -8,7 +8,10 @@ const Orders = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const token = localStorage.getItem("token", (req,res)=> res.data.token);
+        const token = localStorage.getItem(
+          "token",
+          (req, res) => res.data.token
+        );
         if (!token) {
           alert("Please login to view your orders");
           return;
@@ -59,4 +62,4 @@ const Orders = () => {
   );
 };
 
-export default Orders;
+export default React.memo(Orders);

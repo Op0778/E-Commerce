@@ -2,7 +2,6 @@ import React from "react";
 import Shop from "./Shop";
 import Navbar from "../component/Navbar";
 import Footer from "../component/Footer";
-
 const Home = () => {
   return (
     <div>
@@ -13,4 +12,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default React.memo(Home);

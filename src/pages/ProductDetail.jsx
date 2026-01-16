@@ -135,4 +135,4 @@ const ProductDetail = ({ token }) => {
   );
 };
 
-export default ProductDetail;
+export default React.memo(ProductDetail);

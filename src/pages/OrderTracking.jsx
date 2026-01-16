@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FaCheck } from "react-icons/fa";
 import "../style/OrderTracking.css";
@@ -70,4 +70,4 @@ function OrderTracking({ order }) {
   );
 }
 
-export default OrderTracking;
+export default React.memo(OrderTracking);

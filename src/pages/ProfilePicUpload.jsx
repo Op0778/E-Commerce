@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import React, { useState } from "react";
 
 function ProfilePicUpload() {
   const [image, setImage] = useState(null);
@@ -28,4 +28,4 @@ function ProfilePicUpload() {
   );
 }
 
-export default ProfilePicUpload;
+export default React.memo(ProfilePicUpload);
