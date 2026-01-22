@@ -98,6 +98,7 @@ app.post("/api/login", async (req, res) => {
     const token = jwt.sign({ id: user._id }, "secret123", { expiresIn: "1h" });
 
     res.json({ token, user }); // ✅ send user object along with token
+    //console.log(user.role);
   } catch (err) {
     res.status(500).json(err, { error: "Server error" });
   }
