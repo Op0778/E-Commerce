@@ -3,6 +3,7 @@ import axios from "axios";
 import { FaUserCircle } from "react-icons/fa";
 import "../style/profileStyle.css";
 import { useNavigate } from "react-router-dom";
+import connectionUrl from "./url";
 
 function Profile({ token }) {
   const [user, setUser] = useState(null);
@@ -11,12 +12,9 @@ function Profile({ token }) {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await axios.get(
-          "https://ecommerce-backend-b23p.onrender.com/api/profile",
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        const res = await axios.get(`${connectionUrl}/api/profile`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         setUser(res.data);
       } catch (err) {
         console.error(err);
@@ -38,7 +36,7 @@ function Profile({ token }) {
       ) : (
         <FaUserCircle size={"100px"} color="#777" />
       )}
-{console.log("profile pic is  ",user.profilePic)}
+      {console.log("profile pic is  ", user.profilePic)}
       <p>
         <strong>Username:</strong> {user.username}
       </p>

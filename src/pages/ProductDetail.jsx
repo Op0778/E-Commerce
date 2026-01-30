@@ -4,6 +4,7 @@ import axios from "axios";
 import { FaHome, FaRegHeart, FaMoneyBillWave } from "react-icons/fa";
 import { MdLocalShipping, MdReplay, MdSupportAgent } from "react-icons/md";
 import "../style/productDetailsStyle.css";
+import connectionUrl from "./url";
 
 const ProductDetail = ({ token }) => {
   const { id } = useParams();
@@ -15,9 +16,7 @@ const ProductDetail = ({ token }) => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await axios.get(
-          `https://ecommerce-backend-b23p.onrender.com/api/products/${id}`
-        );
+        const res = await axios.get(`${connectionUrl}/api/products/${id}`);
         setProduct(res.data);
       } catch (e) {
         console.error("Error fetching product:", e);
@@ -32,12 +31,9 @@ const ProductDetail = ({ token }) => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await axios.get(
-          "https://ecommerce-backend-b23p.onrender.com/api/profile",
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        const res = await axios.get(`${connectionUrl}/api/profile`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         setUser(res.data);
       } catch (err) {
         console.error("Profile fetch error:", err);
@@ -55,7 +51,7 @@ const ProductDetail = ({ token }) => {
       }
 
       const res = await axios.post(
-        "https://ecommerce-backend-b23p.onrender.com/api/orders",
+        `${connectionUrl}/api/orders`,
         { productId: product._id, quantity: 1 },
         { headers: { Authorization: `Bearer ${token}` } }
       );

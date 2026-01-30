@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import OrderTracking from "./OrderTracking";
+import connectionUrl from "./url";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -17,12 +18,9 @@ const Orders = () => {
           return;
         }
 
-        const res = await axios.get(
-          "https://ecommerce-backend-b23p.onrender.com/api/orders",
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        const res = await axios.get(`${connectionUrl}/api/orders`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
         setOrders(res.data);
       } catch (err) {

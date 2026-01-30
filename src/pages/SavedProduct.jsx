@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FaHeart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import connectionUrl from "./url";
 
 function SavedProduct() {
   const [saved, setSaved] = useState([]);
@@ -15,10 +16,9 @@ function SavedProduct() {
 
     const fetchSaved = async () => {
       try {
-        const res = await axios.get(
-          `https://ecommerce-backend-b23p.onrender.com/api/saved/${userId}`,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
+        const res = await axios.get(`${connectionUrl}/api/saved/${userId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         setSaved(res.data);
       } catch (err) {
         console.error("Error fetching saved products:", err);
@@ -34,22 +34,21 @@ function SavedProduct() {
       if (isSaved) {
         // Remove product
         await axios.delete(
-          `https://ecommerce-backend-b23p.onrender.com/api/remove/${userId}/${productId}`,
+          `${connectionUrl}/api/remove/${userId}/${productId}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setSaved((prev) => prev.filter((p) => p._id !== productId));
       } else {
         // Save product
         await axios.post(
-          `https://ecommerce-backend-b23p.onrender.com/api/users/${userId}/save`,
+          `${connectionUrl}/api/users/${userId}/save`,
           { productId },
           { headers: { Authorization: `Bearer ${token}` } }
         );
         // re-fetch after saving
-        const res = await axios.get(
-          `https://ecommerce-backend-b23p.onrender.com/api/saved/${userId}`,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
+        const res = await axios.get(`${connectionUrl}/api/saved/${userId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         setSaved(res.data);
       }
     } catch (err) {

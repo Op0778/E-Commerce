@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import connectionUrl from "../pages/url";
 
 export default function Register() {
   const [form, setForm] = useState({ username: "", email: "", password: "" });
@@ -12,7 +13,7 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("https://ecommerce-backend-b23p.onrender.com/api/register", form);
+      await axios.post(`${connectionUrl}/api/register`, form);
       alert("Registered successfully!");
       navigate("/");
     } catch (err) {

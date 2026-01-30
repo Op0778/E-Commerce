@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import "../style/formStyle.css";
+import connectionUrl from "../pages/url";
 
 export default function Login({ onLogin }) {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -13,18 +14,18 @@ export default function Login({ onLogin }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(
-        "https://ecommerce-backend-b23p.onrender.com/api/login",
-        form
-      );
+      const res = await axios.post(`${connectionUrl}/api/login`, form);
 
       const token = res.data.token;
       const userId = res.data.user._id;
+      const role = res.data.user.role;
 
       localStorage.setItem("token", token);
       localStorage.setItem("userId", userId);
+      localStorage.setItem("role", role);
 
-      onLogin(token, userId);
+      onLogin(token, userId, role);
+      console.log("token : ", token, "userId : ", userId, "role : ", role);
       navigate("/home");
     } catch (err) {
       alert(err.response?.data?.error || "Error");

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../style/formStyle.css";
+import connectionUrl from "./url";
 
 const UpdateProfile = () => {
   const [form, setForm] = useState({ mobile: "", address: "" });
@@ -16,10 +17,9 @@ const UpdateProfile = () => {
       if (!userId || !token) return;
 
       try {
-        const res = await axios.get(
-          `https://ecommerce-backend-b23p.onrender.com/api/users/${userId}`,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
+        const res = await axios.get(`${connectionUrl}/api/users/${userId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
         setForm({
           mobile: res.data.mobile || "",
@@ -47,7 +47,7 @@ const UpdateProfile = () => {
 
     try {
       const res = await axios.patch(
-        `https://ecommerce-backend-b23p.onrender.com/api/users/update/${userId}`,
+        `${connectionUrl}/api/users/update/${userId}`,
         form,
         { headers: { Authorization: `Bearer ${token}` } }
       );

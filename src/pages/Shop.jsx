@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import "../style/shopStyle.css";
+import connectionUrl from "./url";
 
 const Shop = () => {
   const [products, setProducts] = useState([]);
@@ -13,9 +14,7 @@ const Shop = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get(
-          "https://ecommerce-backend-b23p.onrender.com/api/products"
-        );
+        const res = await axios.get(`${connectionUrl}/api/products`);
         setProducts(Array.isArray(res.data) ? res.data : []);
       } catch (err) {
         console.error("Error fetching products:", err);
@@ -32,9 +31,7 @@ const Shop = () => {
         const userId = localStorage.getItem("userId");
         if (!userId) return;
 
-        const res = await axios.get(
-          `https://ecommerce-backend-b23p.onrender.com/api/saved/${userId}`
-        );
+        const res = await axios.get(`${connectionUrl}/api/saved/${userId}`);
         // store only IDs to use with includes
         setFavorites(res.data.map((prod) => prod._id));
       } catch (err) {
@@ -51,7 +48,7 @@ const Shop = () => {
       if (!userId) return;
 
       const res = await axios.post(
-        `https://ecommerce-backend-b23p.onrender.com/api/favorites/${productId}`,
+        `${connectionUrl}/api/favorites/${productId}`,
         { userId }
       );
       // Update local state with updated favorites from DB

@@ -12,20 +12,29 @@ import SavedProduct from "./pages/SavedProduct";
 import Orders from "./pages/Orders";
 import UpdateProfile from "./pages/UpdateProfile";
 import ProfilePicUpload from "./pages/ProfilePicUpload";
+import AdminRoute from "./pages/admin/AdminRoute";
+import Dashboard from "./pages/admin/Dashboard";
+import UserList from "./pages/admin/UsersList";
+import Products from "./pages/admin/Products";
+import ProductUpdate from "./pages/admin/ProductUpdate";
+import AddProduct from "./pages/admin/AddProduct";
+import UserUpdate from "./pages/admin/UserUpdate";
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem("token"));
 
-  const handleLogin = (t, id) => {
+  const handleLogin = (t, id, role) => {
     setToken(t);
     localStorage.setItem("token", t);
     localStorage.setItem("userId", id);
+    localStorage.setItem("role", role);
   };
 
   const handleLogout = () => {
     setToken(null);
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
+    localStorage.removeItem("role");
   };
 
   return (
@@ -56,6 +65,14 @@ function App() {
           element={token ? <SavedProduct /> : <Navigate to="/" />}
         />
         <Route path="/order" element={<Orders />} />
+        <Route path="/admin" element={<AdminRoute />}>
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="users" element={<UserList />} />
+          <Route path="user/update/:id" element={<UserUpdate />} />
+          <Route path="product" element={<Products />} />
+          <Route path="product/update/:id" element={<ProductUpdate />} />
+          <Route path="product/newproduct" element={<AddProduct />} />
+        </Route>
       </Routes>
       {/* <Footer /> */}
     </>

@@ -12,6 +12,7 @@ import { BsCart } from "react-icons/bs";
 import { MdLogout } from "react-icons/md";
 import "../style/shopStyle.css";
 import "../style/navStyle.css";
+import connectionUrl from "../pages/url";
 
 const Navbar = () => {
   const [products, setProducts] = useState([]);
@@ -19,7 +20,16 @@ const Navbar = () => {
   const [searched, setSearched] = useState(false);
   const navigate = useNavigate();
 
-  // Handle search button click
+  const handleAdminLogin = () => {
+    const role = localStorage.getItem("role");
+
+    if (role === "admin") {
+      navigate("/admin/dashboard");
+    } else {
+      alert("Admin Access Only");
+    }
+  };
+
   const handleSearch = async () => {
     try {
       if (!searchTerm.trim()) {
@@ -27,7 +37,7 @@ const Navbar = () => {
         return;
       }
       const res = await axios.get(
-        `https://ecommerce-backend-b23p.onrender.com/api/products/search?q=${searchTerm}`
+        `${connectionUrl}/api/products/search?q=${searchTerm}`,
       );
       setProducts(res.data);
       setSearched(true);
@@ -46,6 +56,7 @@ const Navbar = () => {
           <div className="navbar-logo">
             <BsCart />
           </div>
+          <div onClick={handleAdminLogin}>admin</div>
         </div>
 
         <div className="navbar-search">

@@ -47,6 +47,7 @@ const productSchema = new mongoose.Schema({
 });
 const Product = mongoose.model("Product", productSchema);
 
+//Order schema
 const orderSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -95,9 +96,17 @@ app.post("/api/login", async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ error: "Invalid credentials" });
 
-    const token = jwt.sign({ id: user._id }, "secret123", { expiresIn: "1h" });
+    const token = jwt.sign({ id: user._id, role: user.role }, "secret123", {
+      expiresIn: "1h",
+    });
 
-    res.json({ token, user }); // ✅ send user object along with token
+    res.json({
+      token,
+      user: {
+        _id: user._id,
+        role: user.role,
+      },
+    }); // ✅ send user object along with token
     //console.log(user.role);
   } catch (err) {
     res.status(500).json(err, { error: "Server error" });
@@ -152,7 +161,7 @@ app.patch("/api/users/update/:id", async (req, res) => {
     const updatedUser = await User.findByIdAndUpdate(
       id,
       { $set: updateFields },
-      { new: true }
+      { new: true },
     );
     if (!updatedUser) {
       return res.status(404).json({ message: "User not found" });
@@ -162,6 +171,7 @@ app.patch("/api/users/update/:id", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
 // get all products
 app.get("/api/products", async (req, res) => {
   const products = await Product.find();
@@ -250,12 +260,12 @@ app.post("/api/orders", authMiddleware, async (req, res) => {
   }
 });
 
-// ✅ Get single order by ID (still works if you want it)
+//  Get single order by ID (still works if you want it)
 app.get("/api/orders/:id", authMiddleware, async (req, res) => {
   try {
     const order = await Order.findById(req.params.id).populate(
       "productId",
-      "name price image"
+      "name price image",
     );
 
     if (!order) return res.status(404).json({ error: "Order not found" });
@@ -285,7 +295,7 @@ app.post("/api/favorites/:productId", async (req, res) => {
 
     if (user.favorites.includes(productId)) {
       user.favorites = user.favorites.filter(
-        (id) => id.toString() !== productId
+        (id) => id.toString() !== productId,
       );
     } else {
       user.favorites.push(productId);
@@ -338,7 +348,149 @@ app.delete("/api/remove/:userId/:productId", async (req, res) => {
   }
 });
 
+// admin routes
+
+//middleware
+const isAdmin = (req, res, next) => {
+  if (!req.user || req.user.role !== "admin") {
+    return res.status(403).json({ error: "Admin access only" });
+  }
+  next();
+};
+
+//middleware
+const verifyToken = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ error: "no token provided" });
+  }
+
+  const token = authHeader.split(" ")[1];
+
+  try {
+    const decode = jwt.verify(token, "secret123");
+    req.user = decode;
+    next();
+  } catch (err) {
+    return res.status(401).json({ error: err.message });
+  }
+};
+
+// get all users
+app.get("/api/users", verifyToken, isAdmin, async (req, res) => {
+  const users = await User.find();
+  res.json(users);
+});
+
+// get user by id
+app.get("/api/user/:id", verifyToken, isAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: "Invalid user ID" });
+    }
+
+    const user = await User.findById(id);
+    if (!user) return res.status(404).json({ message: "user not found" });
+
+    res.json(user);
+  } catch (err) {
+    console.error("user fetch error:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+// profile update
+app.patch(
+  "/api/admin/users/update/:id",
+  verifyToken,
+  isAdmin,
+  async (req, res) => {
+    const { id } = req.params;
+    const { username, role, email, password, mobile, address } = req.body;
+    try {
+      const updateFields = {};
+      if (username) updateFields.username = username;
+      if (role) updateFields.role = role;
+      if (email) updateFields.email = email;
+      if (password) updateFields.password = password;
+      if (mobile) updateFields.mobile = mobile;
+      if (address) updateFields.address = address;
+      const updatedUser = await User.findByIdAndUpdate(
+        id,
+        { $set: updateFields },
+        { new: true },
+      );
+      if (!updatedUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      res.json({ message: "Profile updated successfully", user: updatedUser });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  },
+);
+
+// product update
+app.patch("/api/product/update/:id", verifyToken, isAdmin, async (req, res) => {
+  const { id } = req.params;
+  const { name, category, brand, price, stock, rating, description, image } =
+    req.body;
+  try {
+    const updateFields = {};
+    if (name) updateFields.name = name;
+    if (category) updateFields.category = category;
+    if (brand) updateFields.brand = brand;
+    if (price) updateFields.price = price;
+    if (stock) updateFields.stock = stock;
+    if (rating) updateFields.rating = rating;
+    if (description) updateFields.description = description;
+    if (image) updateFields.image = image;
+    const updatedProduct = await Product.findByIdAndUpdate(
+      id,
+      { $set: updateFields },
+      { new: true },
+    );
+    if (!updatedProduct) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    res.json({
+      message: "Product updated successfully",
+      product: updatedProduct,
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+//Add product
+app.post("/api/product/newproduct", verifyToken, isAdmin, async (req, res) => {
+  try {
+    const { name, category, brand, price, stock, rating, description, image } =
+      req.body;
+
+    const product = new Product({
+      name,
+      category,
+      brand,
+      price,
+      stock,
+      rating,
+      description,
+      image,
+    });
+    await product.save();
+
+    res.json({ message: "Product Added Successfully" });
+  } catch (err) {
+    res.status(500).json(err, { error: "Server error" });
+  }
+});
+
 const PORT = process.env.PORT || 5000;
+
 app.listen(PORT, () =>
-  console.log(`Server running on http://localhost:${PORT}`)
+  console.log(`Server running on http://localhost:${PORT}`),
 );

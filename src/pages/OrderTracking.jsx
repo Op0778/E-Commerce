@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FaCheck } from "react-icons/fa";
 import "../style/OrderTracking.css";
+import connectionUrl from "./url";
 
 const steps = ["Placed", "Shipped", "Nearby", "Out for Delivery", "Delivered"];
 
@@ -19,7 +20,7 @@ function OrderTracking({ order }) {
     const fetchStatus = async () => {
       try {
         const res = await axios.get(
-          `https://ecommerce-backend-b23p.onrender.com/api/orders/${order._id}`,
+          `${connectionUrl}/api/orders/${order._id}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setStatus(res.data.status);

@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
+import connectionUrl from "./url";
 
 function ProfilePicUpload() {
   const [image, setImage] = useState(null);
@@ -9,13 +10,9 @@ function ProfilePicUpload() {
     const formData = new FormData();
     formData.append("image", image);
 
-    await axios.post(
-      "https://ecommerce-backend-b23p.onrender.com/api/upload",
-      formData,
-      {
-        headers: { "Content-Type": "multipart/form-data" },
-      }
-    );
+    await axios.post(`${connectionUrl}/api/upload`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
 
     alert("Profile uploaded!");
   };
