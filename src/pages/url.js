@@ -1,3 +1,3 @@
-const connectionUrl = "http://localhost:5000";
+const connectionUrl = "https://ecommerce-backend-b23p.onrender.com";
 
 export default connectionUrl;
