@@ -13,9 +13,9 @@ import upload from "./upload.js";
 const app = express();
 app.use(cors());
 app.use(express.json());
-// process.env.MONGO_URI
+// mongodb://localhost:27017/e-commerce
 mongoose
-  .connect("mongodb://localhost:27017/e-commerce")
+  .connect("process.env.MONGO_URI")
   .then(() => console.log(" MongoDB connected"))
   .catch((err) => console.error(" MongoDB error:", err));
 
