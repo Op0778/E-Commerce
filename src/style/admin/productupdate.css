@@ -1,0 +1,39 @@
+.add-update-product form {
+  text-align: center;
+  border: 1px solid black;
+  border-radius: 10px;
+  height: fit-content;
+  width: 50vw;
+  margin-left: 25vw;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.add-update-product input,
+.add-update-product textarea {
+  width: 35vw;
+  text-align: center;
+  height: 50px;
+  border-radius: 10px;
+  color: blue;
+}
+
+.add-update-product img {
+  height: 150px;
+  width: 150px;
+}
+
+.add-update-product button {
+  width: 20vw;
+  height: 30px;
+  border-radius: 5px;
+}
+
+.delete-btn:hover {
+  background-color: red;
+  color: aliceblue;
+}

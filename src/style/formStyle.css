@@ -1,0 +1,77 @@
+.bg {
+  display: flex;
+  align-items: center;
+  height: 100vh;
+  background-image: url("https://thumbs.dreamstime.com/b/digital-shopping-cart-keyboard-e-commerce-icons-glowing-technology-background-digital-shopping-cart-keyboard-e-373822163.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.log-reg-form {
+  text-align: center;
+  border: 1px solid black;
+  border-radius: 10px;
+  height: 50vh;
+  width: 50vw;
+  margin-left: 25vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
+  /*.glass effect */
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(7.9px);
+  -webkit-backdrop-filter: blur(7.9px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+.log-reg-form h2,
+label {
+  color: aliceblue;
+}
+.log-reg-form form {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-direction: column;
+}
+.log-reg-form input {
+  height: 30px;
+  border: 1px solid;
+  border-radius: 5px;
+  width: 30vw;
+}
+.log-reg-form input:focus {
+  border: 1px solid #007bff;
+  outline: none;
+}
+.log-reg-form button {
+  width: 100px;
+  text-align: center;
+  background-color: #007bff;
+  color: aliceblue;
+}
+.log-reg-form button:hover {
+  cursor: pointer;
+  background-color: black;
+}
+.error {
+  color: red;
+}
+.relink {
+  color: yellow;
+}
+
+@media (max-width: 480px) {
+  .log-reg-form {
+    height: 50vh;
+    width: 90vw;
+    margin: 5vw;
+  }
+  .log-reg-form input {
+    width: 60vw;
+  }
+}
