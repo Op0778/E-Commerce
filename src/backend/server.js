@@ -3,17 +3,16 @@ import mongoose from "mongoose";
 import cors from "cors";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-// import dotenv from "dotenv";
+import dotenv from "dotenv";
 //import multer from "multer";
 import fs from "fs";
 import upload from "./upload.js";
 
-// dotenv.config();
+dotenv.config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
-// mongodb://localhost:27017/e-commerce
 mongoose
   .connect("process.env.MONGO_URI")
   .then(() => console.log(" MongoDB connected"))
