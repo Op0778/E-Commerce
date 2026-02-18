@@ -19,9 +19,9 @@ app.use(express.json());
 // process.env.MONGO_URI
 mongoose
   .connect(process.env.MONGO_URI)
-  .connect(
-    "mongodb+srv://omprakash:opMdu020@cluster0.txpzw.mongodb.net/e-commerce?retryWrites=true&w=majority",
-  )
+  // .connect(
+  //   "mongodb+srv://omprakash:opMdu020@cluster0.txpzw.mongodb.net/e-commerce?retryWrites=true&w=majority",
+  // )
   .then(() => console.log(" MongoDB connected"))
   .catch((err) => console.error(" MongoDB error:", err));
 
