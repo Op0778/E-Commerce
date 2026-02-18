@@ -7,9 +7,11 @@ import dotenv from "dotenv";
 //import multer from "multer";
 import fs from "fs";
 import upload from "./upload.js";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 dotenv.config();
-
+const genAI = new GoogleGenerativeAI("AIzaSyAdz5MdY0I-BEJ60fNNODqCYkQrpmpeoXA");
+//process.env.GEMINI_API_KEY
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -563,6 +565,58 @@ app.delete(
     }
   },
 );
+
+// AI Generate (Normal Response)
+app.post("/api/ai/generate", async (req, res) => {
+  try {
+    const { prompt } = req.body;
+
+    if (!prompt) {
+      return res.status(400).json({ error: "Prompt is required" });
+    }
+
+    const model = genAI.getGenerativeModel({
+      model: process.env.GEMINI_MODEL, // gemini-1.5-flash
+    });
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text();
+
+    res.json({ success: true, output: text });
+  } catch (error) {
+    console.error("Gemini error:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+app.post("/api/ai/stream", async (req, res) => {
+  try {
+    const { prompt } = req.body;
+
+    const model = genAI.getGenerativeModel({
+      model: "gemini-1.5-flash",
+    });
+    // process.env.GEMINI_MODEL
+    const result = await model.generateContentStream(prompt);
+
+    res.setHeader("Content-Type", "text/plain");
+    res.setHeader("Transfer-Encoding", "chunked");
+
+    for await (const chunk of result.stream) {
+      const chunkText = chunk.text();
+      res.write(chunkText);
+    }
+
+    res.end();
+  } catch (error) {
+    console.error("Stream error:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
 
 const PORT = process.env.PORT || 5000;
 
