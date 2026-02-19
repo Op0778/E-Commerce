@@ -576,7 +576,7 @@ app.post("/api/ai/generate", async (req, res) => {
     }
 
     const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash", // gemini-1.5-flash
+      model: "gemini-1.5-flash-latest", // gemini-1.5-flash-latest
     });
 
     const result = await model.generateContent(prompt);
@@ -598,7 +598,7 @@ app.post("/api/ai/stream", async (req, res) => {
     const { prompt } = req.body;
 
     const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash",
+      model: "gemini-1.5-flash-latest",
     });
     // process.env.GEMINI_MODEL
     const result = await model.generateContentStream(prompt);
